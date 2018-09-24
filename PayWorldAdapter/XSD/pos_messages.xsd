@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.vibbek.com/pos"
+    xmlns="http://www.vibbek.com/pos"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified">
+
+    <xsd:include schemaLocation="base_types.xsd" />
+
+    <!-- Request to perform a payment transaction and the respective response of the device -->
+    <xsd:element name="financialTrxRequest" type="FinancialTrxRequest" />
+    <xsd:element name="financialTrxResponse" type="FinancialTrxResponse" />
+
+    <!-- Request to activate the terminal and the respective response of the device -->
+    <xsd:element name="activationRequest" type="ActivationRequest" />
+    <xsd:element name="activationResponse" type="ActivationResponse" />
+
+    <!-- Request to trigger configuration process of the device and the respective response of the device -->
+    <xsd:element name="siConfigRequest" type="SiConfigRequest" />
+    <xsd:element name="siConfigResponse" type="SiConfigResponse" />
+
+    <!-- The deactivation of the terminal by the PoS system and the respective response of the device -->
+    <xsd:element name="deactivationRequest" type="DeactivationRequest" />
+    <xsd:element name="deactivationResponse" type="DeactivationResponse" />
+
+    <!-- The day-end closing at the terminal and the respective response of the device -->
+    <xsd:element name="beFinalBalanceRequest" type="BeFinalBalanceRequest" />
+    <xsd:element name="beFinalBalanceResponse" type="BeFinalBalanceResponse" />
+
+    <!-- The initialization of the terminal and the respective response of the device -->
+    <xsd:element name="siInitRequest" type="SiInitRequest" />
+    <xsd:element name="siInitResponse" type="SiInitResponse" />
+
+    <!-- Connection test and the respective response of the device -->
+    <xsd:element name="pingRequest" type="PingRequest" />
+    <xsd:element name="pingResponse" type="PingResponse" />
+
+    <!-- Used to cancel last transaction and the respective response of the device -->
+    <xsd:element name="reversalRequest" type="ReversalRequest" />
+    <xsd:element name="reversalResponse" type="ReversalResponse" />
+
+    <!-- Request to perform data submission to acquirer and the respective response of the device -->
+    <xsd:element name="miSubmissionRequest" type="MiSubmissionRequest" />
+    <xsd:element name="miSubmissionResponse" type="MiSubmissionResponse" />
+
+    <!-- The transmission of transaction data to PMS and the respective response of the device -->
+    <xsd:element name="beTransmissionRequest" type="BeTransmissionRequest" />
+    <xsd:element name="beTransmissionResponse" type="BeTransmissionResponse" />
+
+    <!-- Requests the receipt of last transaction or last end of day and the respective response of the device -->
+    <xsd:element name="reprintReceiptRequest" type="ReprintReceiptRequest" />
+    <xsd:element name="reprintReceiptResponse" type="ReprintReceiptResponse" />
+
+    <!-- Requests configuration data of the device and the respective response of the device -->
+    <xsd:element name="configDataRequest" type="ConfigDataRequest" />
+    <xsd:element name="configDataResponse" type="ConfigDataResponse" />
+
+    <!-- Requests an intermediate end of day receipt and the response -->
+    <xsd:element name="interEodReceiptRequest" type="IntermediateEodReceiptRequest" />
+    <xsd:element name="interEodReceiptResponse" type="IntermediateEodReceiptResponse" />
+
+    <!-- Request to detect or wait for a card contact and the response containing the card present status -->
+    <xsd:element name="waitForCardPresentRequest" type="WaitForCardPresentRequest" />
+    <xsd:element name="waitForCardPresentResponse" type="WaitForCardPresentResponse" />
+
+    <!-- Request to detect or wait for a card removal and the response containing the card present status -->
+    <xsd:element name="waitForCardRemovedRequest" type="WaitForCardRemovedRequest" />
+    <xsd:element name="waitForCardRemovedResponse" type="WaitForCardRemovedResponse" />
+
+    <!-- Used to cancel a reservation and the respective response of the device -->
+    <xsd:element name="cancelReservationRequest" type="CancelReservationRequest" />
+    <xsd:element name="cancelReservationResponse" type="CancelReservationResponse" />
+
+    <!-- Requests the check of a coupon id and the respective response of the device -->
+    <xsd:element name="checkCouponIdRequest" type="CheckCouponIdRequest" />
+    <xsd:element name="checkCouponIdResponse" type="CheckCouponIdResponse" />
+
+    <!-- Notification to signal an error situation. -->
+    <xsd:element name="errorNotification" type="ErrorNotification" />
+
+    <!-- Requests technical information from the PIN pad and the respective response -->
+    <xsd:element name="pinpadInformationRequest" type="PinpadInformationRequest" />
+    <xsd:element name="pinpadInformationResponse" type="PinpadInformationResponse" />
+
+    <!-- Requests a Tax Free voucher and the response containing the Tax Free voucher -->
+    <xsd:element name="taxFreeVoucherRequest" type="TaxFreeVoucherRequest" />
+    <xsd:element name="taxFreeVoucherResponse" type="TaxFreeVoucherResponse" />
+
+    <!-- Voids a Tax Free voucher and the response -->
+    <xsd:element name="taxFreeVoidVoucherRequest" type="TaxFreeVoidVoucherRequest" />
+    <xsd:element name="taxFreeVoidVoucherResponse" type="TaxFreeVoidVoucherResponse" />
+    
+    <!-- Request the PAN token used and the response containing the requested PAN token -->
+    <xsd:element name="generatePanTokenRequest" type="GeneratePanTokenRequest" />
+    <xsd:element name="generatePanTokenResponse" type="GeneratePanTokenResponse" />
+    
+    <!-- Requests an account balance from the loyalty system and the respective response of the device -->
+    <xsd:element name="loyBalanceRequest" type="LoyBalanceRequest" />
+    <xsd:element name="loyBalanceResponse" type="LoyBalanceResponse" />
+
+    <!-- Requests to perform a SIX DCC-Rate-Request and to print a currency rate ticket-->
+    <xsd:element name="printCurrencyRateTicketRequest" type="PrintCurrencyRateTicketRequest" />
+    <xsd:element name="printCurrencyRateTicketResponse" type="PrintCurrencyRateTicketResponse" />
+
+    <xsd:simpleType name="TransactionType">
+        <xsd:restriction base="xsd:unsignedByte">
+            <xsd:enumeration value="0" /> <!-- Purchase -->
+            <xsd:enumeration value="1" /> <!-- Purchase Reservation -->
+            <xsd:enumeration value="3" /> <!-- Cash Advance -->
+            <xsd:enumeration value="4" /> <!-- Credit -->
+            <xsd:enumeration value="5" /> <!-- Purchase phone authorized -->
+            <xsd:enumeration value="6" /> <!-- Purchase force acceptance -->
+            <xsd:enumeration value="11" /> <!-- Purchase with cashback -->
+            <xsd:enumeration value="12" /> <!-- Load -->
+            <xsd:enumeration value="50" /> <!-- Reservation -->
+            <xsd:enumeration value="51" /> <!-- Reservation adjustment -->
+            <xsd:enumeration value="52" /> <!-- Confirm phone authorized reservation -->
+            <xsd:enumeration value="53" /> <!-- Balance Inquiry -->
+            <xsd:enumeration value="57" /> <!-- Activate Card -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="LineItems">
+        <xsd:all>
+            <xsd:element name="lineItem" type="LineItem" minOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="LineItem">
+        <xsd:all>
+            <xsd:element name="productCode" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="price" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="productDesc" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="InvoiceLineItems">
+        <xsd:all>
+            <xsd:element name="lineItem" type="InvoiceLineItem" minOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="InvoiceLineItem">
+        <xsd:all>
+            <!-- The description of the item as displayed on the sales receipt -->
+            <xsd:element name="description" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- Cost of the item including VAT in minor units -->
+            <xsd:element name="grossAmount" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- The cost of the item less VAT in minor units -->
+            <xsd:element name="netAmount" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- Amount of VAT applied on the item in minor units -->
+            <xsd:element name="vatAmount" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- The VAT rate of the item -->
+            <xsd:element name="vatRate" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- Number of that particular item which have been purchased -->
+            <xsd:element name="quantity" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="TransactionData">
+        <xsd:all>
+            <!-- The total amount to authorize, including the amountOther -->
+            <xsd:element name="amount" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <!-- The amount other is present if transaction type is ‘Purchase with cashback’ -->
+            <xsd:element name="amountOther" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="currency" type="CurrencyType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionType" type="TransactionType" minOccurs="1" maxOccurs="1" />
+            <!-- authorization code of a previously phone authorised transaction -->
+            <xsd:element name="authorisationCode" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <!-- transaction reference number contains the reference to a previously authorized transaction.
+                This data is necessary when a connection between authorizations needs to be made, e.g. for Reservation/Top-Up/Reservation Purchase -->
+            <xsd:element name="transactionRefNumber" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <!-- info of purchased items. For loyalty only -->
+            <xsd:element name="lineItems" type="LineItems" minOccurs="0" maxOccurs="1" />
+            <!-- whether the till is enable to handle partial approval. if not set, support for partial approval is disabled -->
+            <xsd:element name="partialApprovalCap" type="PartialApprovalCapabilityType" minOccurs="0" maxOccurs="1" /> 
+            <!-- whether dynamic currency conversion is disabled for this transaction -->
+            <xsd:element name="noDCC" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+            <!-- whether the (magnetic stripe) card for this transaction should be processed as a Union Pay card -->
+            <xsd:element name="forceUP" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+            <!-- whether the transaction should be processed online -->
+            <xsd:element name="forceOnline" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+            <!-- The PoS may add its own transaction specific data in this field (like an attendant reference number or its own transaction reference number). -->
+            <xsd:element name="additionalMerchantData" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <!-- The following field is deprecated. Use the addtionalMerchantData field. -->
+            <xsd:element name="arsTransactionNumber" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <!-- original transaction date contains a date of a previously transaction.
+                The data is necessary when a transaction with transaction type 'Credit' and SIX DCC to be made.
+                Format: yyyyMMdd -->
+            <xsd:element name="originalTrxDate" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <!-- Container for manually entered PAN Data -->
+    <xsd:complexType name="ManualPanData">
+        <xsd:all>
+         <!-- The date must be formatted yyMMdd or yyMM -->
+            <xsd:element name="applicationExpirationDate" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="PAN" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="cvc2" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="panToken" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="BarcodeCardData">
+        <xsd:all>
+            <xsd:element name="aid" type="xsd:base64Binary" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="paymentToken" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="FinancialTrxRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="trxData" type="TransactionData" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="manualPanData" type="ManualPanData" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trxSyncNumber" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardTokenData" type="BarcodeCardData" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="generatePanToken" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trxInfo" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:simpleType name="TrxResultType">
+        <xsd:restriction base="xsd:unsignedByte">
+            <xsd:enumeration value="0" />
+            <xsd:enumeration value="1" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    
+    <xsd:simpleType name="CvmType">
+        <xsd:restriction base="xsd:unsignedShort">
+            <xsd:enumeration value="0" /> <!-- unknown cardholder verification -->
+            <xsd:enumeration value="1" /> <!-- no cardholder verification -->
+            <xsd:enumeration value="2" /> <!-- signature -->
+            <xsd:enumeration value="3" /> <!-- online PIN -->
+            <xsd:enumeration value="4" /> <!-- offline encrypted PIN -->
+            <xsd:enumeration value="5" /> <!-- offline plaintext PIN -->
+            <xsd:enumeration value="6" /> <!-- offline encrypted PIN + signature -->
+            <xsd:enumeration value="7" /> <!-- offline plaintext PIN + signature -->
+            <xsd:enumeration value="8" /> <!-- online PIN + signature -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="PartialApprovalCapabilityType">
+        <xsd:restriction base="xsd:unsignedByte">
+            <xsd:enumeration value="0" /> <!-- Till/ECR doesn´t support partial approvals -->
+            <xsd:enumeration value="1" /> <!-- Till/ECR supports partial approvals -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="FinancialTrxResponse">
+        <xsd:all>
+            <xsd:element name="ep2AuthResponseCode" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ep2AuthResult" type="xsd:unsignedShort" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ep2AuthCode" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ep2TrmId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ep2TrxSeqCnt" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="trxResult" type="TrxResultType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="amountAuth" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="amountAuthCurr" type="CurrencyType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="amountTip" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="transactionRefNumber" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardNumber" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="cardSeqNumber" type="xsd:unsignedShort" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardExpDate" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardAppLabel" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="cardAppId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionTime" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="acquirerId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="dccTrxAmount" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dccTrxAmountCurr" type="CurrencyType" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cvm" type="CvmType" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="amountRemaining" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="partialApprovalFlag" type="PartialApprovalFlagType" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="accardaClubCode" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="accardaPan" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="accardaExpDate" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="brCode" type="xsd:unsignedByte" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trxSyncNumber" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="panToken" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:simpleType name="PartialApprovalFlagType">
+        <xsd:restriction base="xsd:unsignedByte">
+            <xsd:enumeration value="0" /> <!-- partial approval was not supported -->
+            <xsd:enumeration value="1" /> <!-- partial approval was supported -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="LanguageType">
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="en" />
+            <xsd:enumeration value="de" />
+            <xsd:enumeration value="fr" />
+            <xsd:enumeration value="it" />
+            <xsd:enumeration value="nl" />
+            <xsd:enumeration value="ro" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="ActivationRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="language" type="LanguageType" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ActivationResponse">
+    </xsd:complexType>
+
+    <xsd:complexType name="SiConfigRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="SiConfigResponse">
+    </xsd:complexType>
+
+    <xsd:complexType name="DeactivationRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="DeactivationResponse">
+    </xsd:complexType>
+
+    <xsd:complexType name="BeFinalBalanceRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="trxSyncNumber" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="BeFinalBalanceResponse">
+        <xsd:all>
+            <xsd:element name="trxSyncNumber" type="xsd:unsignedInt" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="SiInitRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="SiInitResponse">
+    </xsd:complexType>
+
+    <xsd:complexType name="PingRequest">
+    </xsd:complexType>
+
+    <xsd:complexType name="PingResponse">
+        <xsd:all>
+            <xsd:element name="server" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ReversalRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- The PoS may add its own transaction specific data in this field (like an attendant reference number or its own transaction reference number). -->
+            <xsd:element name="additionalMerchantData" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ReversalResponse">
+        <xsd:all>
+            <xsd:element name="ep2TrmId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ep2TrxSeqCnt" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ep2TrxSeqCntOrigTrx" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ep2TrxTypeExtOrigTrx" type="xsd:unsignedByte" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="amountRev" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="amountRevCurr" type="CurrencyType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="cardNumber" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="cardSeqNumber" type="xsd:unsignedShort" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardExpDate" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardAppLabel" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="cardAppId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionTime" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="acquirerId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="CancelReservationRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="acquirerId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionRefNumber" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="CancelReservationResponse">
+        <xsd:all>
+            <xsd:element name="acquirerId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="amountAuth" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="amountAuthCurr" type="CurrencyType" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ep2AuthResult" type="xsd:unsignedShort" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ep2TrmId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ep2TrxSeqCnt" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="result" type="CancelReservationResultType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionTime" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionRefNumber" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:simpleType name="CancelReservationResultType">
+        <xsd:restriction base="xsd:unsignedByte">
+            <xsd:enumeration value="0" /> <!-- cancellation of reservation successful -->
+            <xsd:enumeration value="1" /> <!-- cancellation of reservation declined -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+
+    <xsd:complexType name="CheckCouponIdRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="couponId" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="CheckCouponIdResponse">
+        <xsd:all>
+            <xsd:element name="result" type="CheckCouponIdResultType" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:simpleType name="CheckCouponIdResultType">
+        <xsd:restriction base="xsd:unsignedByte">
+            <xsd:enumeration value="0" /> <!-- entered coupon id is correct -->
+            <xsd:enumeration value="1" /> <!-- entered coupon id is not correct -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+
+    <xsd:complexType name="MiSubmissionRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="MiSubmissionResponse">
+    </xsd:complexType>
+
+    <xsd:complexType name="BeTransmissionRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="BeTransmissionResponse">
+    </xsd:complexType>
+
+    <xsd:simpleType name="ReceiptType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="EOD" />
+            <xsd:enumeration value="TRX" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="ReprintReceiptRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="type" type="ReceiptType" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ReprintReceiptResponse">
+        <xsd:choice>
+            <xsd:element name="lastTrx" type="FinancialTrxResponse" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="lastRev" type="ReversalResponse" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="lastCancelRes" type="CancelReservationResponse" minOccurs="0" maxOccurs="1" />
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="IntermediateEodReceiptRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="IntermediateEodReceiptResponse">
+    </xsd:complexType>
+
+    <xsd:complexType name="ConfigDataRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ConfigDataResponse">
+        <xsd:all>
+            <xsd:element name="acquirerDataList" type="AcquirerDataList" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ep2Tcd" type="Ep2TerminalConfigData" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ep2Version" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Ep2TerminalConfigData">
+        <xsd:all>
+            <xsd:element name="addTrmCap" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="autoDeclRef" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardRdType" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="commAddrGateWay" type="CommunicationAddress" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="commAddrPMS" type="CommunicationAddress" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="commAddrSCConf" type="CommunicationAddress" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ctlessInd" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataSubmMaxRetry" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dSub" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataSubmRetryDel" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataSubmTime" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataSubmTrigg" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataTransMaxRetry" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataTransRetryDel" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataTransTime" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dataTransTrigg" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="dccProvider" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="defTrxCurrC" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="maxStor" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="mctId" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="phonePrfx" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="pmsId" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="pmsPubKey" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="revRetryDelay" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="scConfTime" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="scId" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="scIntConf" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="scPubKey" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="setCtlessTrmCap" type="Ep2SetCtlessTrmCap" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="statKeyPANRct" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="submInt" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="suppPhone" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trmCap" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trmCntryC" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trmID" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trmLng" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trmRMCap" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trmTrxFctCap" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trmType" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toDataSubSrv" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toInitSrv" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toAuthSrv" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toCardIn" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toCardRem" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toConfTrx" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toDatEntry" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toFB" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toICC" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toPMS" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toPosTrxRq" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toRmdr" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toSCReq" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="toTrxTrans" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trxTransLim" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="trxSubmLim" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="transInt" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="usrRetryCnt" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="versSW" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="CommunicationAddress">
+        <xsd:all>
+            <xsd:element name="internetAddr" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="internetPortNo" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="Ep2SetCtlessTrmCap">
+        <xsd:sequence>
+            <xsd:element name="ep2CtlessTrmCapPerKnl" type="Ep2CtlessTrmCapPerKernel" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Ep2CtlessTrmCapPerKernel">
+        <xsd:all>
+            <xsd:element name="ctlessAddTrmCap" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ctlessDataExchangeFlag" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ctlessKnlID" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ctlessKnlVers" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ctlessTrmCap" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="ctlessTrxMode" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="AcquirerDataList">
+        <xsd:sequence>
+            <xsd:element name="acquirerData" type="AcquirerData" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="AcquirerData">
+        <xsd:all>
+            <xsd:element name="acquirerId" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="terminalApplicationConfigDataList" type="TerminalApplicationConfigDataList" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="TerminalApplicationConfigDataList">
+        <xsd:sequence>
+            <xsd:element name="terminalApplicationConfigData" type="TerminalApplicationConfigData" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="TerminalApplicationConfigData">
+        <xsd:all>
+            <xsd:element name="aid" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="brand" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="readerTechnology" type="ReaderTechnologyType" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:simpleType name="ReaderTechnologyType">
+        <xsd:restriction base="xsd:unsignedShort">
+            <xsd:enumeration value="1" /> <!-- contact reader -->
+            <xsd:enumeration value="2" /> <!-- contactless reader -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="LoyBalanceRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="LoyBalanceResponse">
+    </xsd:complexType>
+
+    <xsd:complexType name="ErrorNotification">
+        <xsd:all>
+            <xsd:element name="cardId" type="xsd:string" minOccurs="0"/>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="WaitForCardPresentRequest">
+        <xsd:all>
+            <xsd:element name="timeout" type="xsd:integer" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="WaitForCardPresentResponse">
+        <xsd:all>
+            <xsd:element name="cardPresent" type="xsd:boolean" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="WaitForCardRemovedRequest">
+        <xsd:all>
+            <xsd:element name="timeout" type="xsd:integer" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="WaitForCardRemovedResponse">
+        <xsd:all>
+            <xsd:element name="cardPresent" type="xsd:boolean" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PinpadInformationRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PinpadInformationResponse">
+        <xsd:all>
+            <xsd:element name="terminalId" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="vpjSoftwareVersion" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="serialNumber" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="hardwareType" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="simCardNumber" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="logLevel" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="vcsIpAddr" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="vcsIpPort" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="vcsConnectTimeout" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="vcsInactiveTimeout" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="pinpadLocalTime" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="nextContactTime" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="pinpadRunningTime" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="freeRamMemory" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="freeFlashMemory" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="offlineTrxNumber" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="offlineTrxAmount" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="TaxFreeVoucherRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="operatorId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionType" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionDate" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="transactionTime" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="invoiceNumber" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="barcodeData" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="totalGrossAmount" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="totalNetAmount" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="totalVatAmount" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="invoiceLineItems" type="InvoiceLineItems" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="TaxFreeVoucherResponse">
+        <xsd:all>
+            <xsd:element name="voucherNumber" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="hostErrorDesc" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="TaxFreeVoidVoucherRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="operatorId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="voucherNumber" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="voucherBarcode" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="TaxFreeVoidVoucherResponse">
+        <xsd:all>
+            <xsd:element name="hostErrorDesc" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="GeneratePanTokenRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="GeneratePanTokenResponse">
+        <xsd:all>
+            <xsd:element name="panToken" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardId" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PrintCurrencyRateTicketRequest">
+        <xsd:all>
+            <xsd:element name="posId" type="xsd:string" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PrintCurrencyRateTicketResponse">
+    </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.vibbek.com/device"
+    xmlns="http://www.vibbek.com/device"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified">
+
+    <xsd:include schemaLocation="base_types.xsd" />
+
+    <!-- Request to interact with an attendant  -->
+    <xsd:element name="confirmationRequest" type="ConfirmationRequest" />
+    <xsd:element name="confirmationResponse" type="ConfirmationResponse" />
+    
+    <!-- Send from PoS system if attendant did not react in specified time -->
+    <xsd:element name="timeoutNotification" type="TimeoutNotification" />
+    
+    <!-- Request to display information for an attendant (a response is not expected) -->
+    <xsd:element name="displayNotification" type="DisplayNotification" />
+    
+    <!-- Request to generate a printout (a response is not expected) -->
+    <xsd:element name="printerNotification" type="PrinterNotification" />
+    
+    <!-- Information about changes to a transaction during loyalty program handling (a response is not expected) -->
+    <xsd:element name="loyPromotionNotification" type="LoyaltyPromotionNotification" />
+    
+    <!-- Information about changes to a transaction during loyalty program handling (a response is not expected) -->
+    <xsd:element name="loyAdviceNotification" type="LoyaltyAdviceNotification" />
+    
+    <!-- Request to abort a transaction process from the PoS system (initiated by attendant). There is no response to this message. -->
+    <xsd:element name="abortCardEntryNotification" type="AbortCardEntryNotification" />
+    
+    <!-- Request containing Manor card data for the PoS to respond with possibly modified transaction data  -->
+    <xsd:element name="manorTrxModificationRequest" type="ManorTrxModificationRequest" />
+    <xsd:element name="manorTrxModificationResponse" type="ManorTrxModificationResponse" />
+    
+    <!-- Request to interact with the attendant and the response from the PoS system. -->
+    <xsd:element name="manorEnterAuthCodeResponse" type="EnterAuthCodeResponse" />
+    <xsd:element name="manorEnterAuthCodeRequest" type="EnterAuthCodeRequest" />
+    
+    <!-- Send to PoS system when the card has been inserted -->
+    <xsd:element name="cardEntryNotification" type="CardEntryNotification" />
+    
+    <!-- Send to PoS system when the card has been removed -->
+    <xsd:element name="cardRemovalNotification" type="CardRemovalNotification" />
+    
+    <!-- Send to PoS system when the transaction has been started -->
+    <xsd:element name="trxStartNotification" type="TrxStartNotification" />
+    
+    <!-- Send to PoS system when the transaction has been completed -->
+    <xsd:element name="trxEndNotification" type="TrxEndNotification" />
+    
+    <!-- Send to PoS system when the transaction has been aborted without correct completion -->
+    <xsd:element name="trxAbortNotification" type="TrxAbortNotification" />
+
+    <xsd:simpleType name="DisplayType">
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="CARDHOLDER" />
+            <xsd:enumeration value="ATTENDANT" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="CampaignType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:enumeration value="1" /> <!-- Reward campaign -->
+            <xsd:enumeration value="2" /> <!-- Voucher -->
+            <xsd:enumeration value="3" /> <!-- Communication campaign -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="RewardType">
+        <xsd:restriction base="xsd:integer">
+            <xsd:enumeration value="1" /> <!-- Discount amount -->
+            <xsd:enumeration value="2" /> <!-- Discount percentage -->
+            <xsd:enumeration value="3" /> <!-- Multiplier on base points-->
+            <xsd:enumeration value="4" /> <!-- Additional points -->
+            <xsd:enumeration value="5" /> <!-- Fixed points -->
+            <xsd:enumeration value="6" /> <!-- Free item -->
+            <xsd:enumeration value="7" /> <!-- Discount redemption -->
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="Display">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="line" type="xsd:string" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="MerchantReceipt">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="admin" type="xsd:boolean" use="required" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="ConfirmationRequest">
+        <xsd:all>
+            <xsd:element name="display" type="Display" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="timeout" type="xsd:integer" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="timeoutReminder" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+        <xsd:attribute name="displayType" type="DisplayType" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="ConfirmationResponse">
+        <xsd:all>
+            <xsd:element name="result" type="xsd:unsignedByte" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="TimeoutNotification">
+    </xsd:complexType>
+    
+    <xsd:complexType name="CardEntryNotification">
+        <xsd:all>
+            <xsd:element name="cardEntryMode" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="CardRemovalNotification">
+    </xsd:complexType>
+    
+    <xsd:complexType name="TrxStartNotification">
+    </xsd:complexType>
+    
+    <xsd:complexType name="TrxEndNotification">
+    </xsd:complexType>
+    
+    <xsd:complexType name="TrxAbortNotification">
+    </xsd:complexType>
+
+    <xsd:complexType name="DisplayNotification">
+        <xsd:all>
+            <xsd:element name="display" type="Display" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="minDisplayTime" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+        <xsd:attribute name="displayType" type="DisplayType" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="PrinterNotification">
+        <xsd:all>
+            <xsd:element name="merchantReceipt" type="MerchantReceipt" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="cardholderReceipt" type="xsd:string" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="Campaigns">
+        <xsd:sequence>
+            <xsd:element name="campaign" type="Campaign" minOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Campaign">
+        <xsd:all>
+            <xsd:element name="title" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="text" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="rewardType" type="RewardType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="campaignType" type="CampaignType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="value" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="valueCurr" type="CurrencyType" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="applied" type="xsd:string" minOccurs="1" maxOccurs="1" /> <!-- Y / N -->
+            <xsd:element name="campaignPoints" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="RedemptionItems">
+        <xsd:sequence>
+            <xsd:element name="redemptionItem" type="RedemptionItem" minOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="RedemptionItem">
+        <xsd:all>
+            <xsd:element name="productCode" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="description" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="points" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="price" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="priceCurr" type="CurrencyType" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="PointBalance">
+        <xsd:all>
+            <xsd:element name="pointsPrevious" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="pointEarned" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="pointsRedeemed" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="pointsAvailable" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="LoyaltyPromotionNotification">
+        <xsd:all>
+            <xsd:element name="originalAmount" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="originalAmountCurr" type="CurrencyType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="campaigns" type="Campaigns" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="availableRedemptionItems" type="RedemptionItems" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="pointBalance" type="PointBalance" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="netAmount" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="netAmountCurr" type="CurrencyType" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="LoyaltyAdviceNotification">
+        <xsd:all>
+            <xsd:element name="originalAmount" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="originalAmountCurr" type="CurrencyType" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="campaigns" type="Campaigns" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="selectedRedemptionItems" type="RedemptionItems" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="pointBalance" type="PointBalance" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="netAmount" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="netAmountCurr" type="CurrencyType" minOccurs="1" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="AbortCardEntryNotification">
+        <xsd:all>
+            <xsd:element name="abortCode" type="xsd:unsignedShort" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+    
+    <xsd:complexType name="ManorTrxModificationRequest">
+        <xsd:all>
+            <!-- The primary account number of the Manor card -->
+            <xsd:element name="pan" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- The expiration date of the Manor card in format yyMM -->
+            <xsd:element name="applicationExpirationDate" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- The name of the cardholder of the Manor card -->
+            <xsd:element name="cardholderName" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <!-- The 'Branchen Code' of the Manor card -->
+            <xsd:element name="brCode" type="xsd:unsignedByte" minOccurs="1" maxOccurs="1" />
+            <!-- The track 3 data of the Manor card -->
+            <xsd:element name="track3Data" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="ManorTrxModificationResponse">
+        <xsd:all>
+            <!-- Modified amount in minor units -->
+            <xsd:element name="amount" type="xsd:unsignedLong" minOccurs="0" maxOccurs="1" />
+            <!-- Modified PAN to use for the transaction -->
+            <xsd:element name="pan" type="xsd:string" minOccurs="0" maxOccurs="1" />
+             <!-- forces the transaction is processed online -->
+            <xsd:element name="forceOnline" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+             <!-- result of the modification regarding further processing:
+                  0 - abort transaction with display "card read"
+                  1 - continue transaction with modified data (default)
+             -->
+            <xsd:element name="modResult" type="xsd:unsignedByte" minOccurs="0" maxOccurs="1" />
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:complexType name="EnterAuthCodeRequest">
+        <xsd:all>
+            <xsd:element name="display" type="Display" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="timeout" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
+            <xsd:element name="timeoutReminder" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+        </xsd:all>
+        <xsd:attribute name="displayType" type="DisplayType" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="EnterAuthCodeResponse">
+        <xsd:all>
+            <xsd:element name="authCode" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+</xsd:schema>
