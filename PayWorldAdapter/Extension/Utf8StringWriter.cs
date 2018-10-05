@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PayWorldAdapter.Extension
+namespace PayWorldAdapter
 {
     public class Utf8StringWriter : StringWriter
     {

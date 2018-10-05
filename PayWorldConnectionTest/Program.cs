@@ -13,7 +13,15 @@ namespace PayWorldConnectionTest
         static void Main(string[] args)
         {
             VPJClient client = new VPJClient("192.168.2.96", 50000);
-            client.SendAmout("2003", 1 *100,CurrencyType.Item978);
+            var posID = Guid.NewGuid().ToString();
+            client.SendAmout(posID,1,CurrencyType.Item978);
+            client.MessageRecivedEvent += Client_MessageRecivedEvent;
+           
+        }
+
+        private static void Client_MessageRecivedEvent(MessageEventArgs e)
+        {
+            
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using PayWorldAdapter.Extension;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;

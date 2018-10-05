@@ -45,8 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\device_messages.cs" />
+    <Compile Include="Classes\MessageEventArgs.cs" />
     <Compile Include="Classes\pos_messages.cs" />
     <Compile Include="CommunicationTCPIP.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="EventsNoArgs.cs" />
+    <Compile Include="CommunicationClient.cs" />
     <Compile Include="Extension\Utf8StringWriter.cs" />
     <Compile Include="Extension\XmlExtension.cs" />
     <Compile Include="Interfaces\IPOSMessage.cs" />

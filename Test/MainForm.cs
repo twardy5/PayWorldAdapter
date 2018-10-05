@@ -20,10 +20,7 @@ namespace Test
         
         //CommunicationTCPIP TCPIPcommunication;
     
-        internal void StartReceiving(string port)
-        {
-           
-        }
+      
         public MainForm()
         {
             InitializeComponent();
