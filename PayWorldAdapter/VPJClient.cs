@@ -18,6 +18,7 @@ namespace PayWorldAdapter
         public event ChangedEventHandler ChangedEvent;
         public event MessageRecivedEventhandler MessageRecivedEvent;
         // Invoke the ChangedEvent  
+
         protected virtual void OnChangedEvent()
         {
             if (ChangedEvent != null)
