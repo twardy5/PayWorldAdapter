@@ -23,6 +23,7 @@ namespace PayWorldAdapter
         {
             if (ChangedEvent != null)
             {
+                //test
                 ChangedEvent();
             }
         }
