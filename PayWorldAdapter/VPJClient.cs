@@ -28,11 +28,6 @@ namespace PayWorldAdapter
             }
         }
 
-        // The following method is exposed to C/AL and will invoke the event trigger that is registered in the ChangedEvent variable.   
-        public void FireEvent()
-        {
-            OnChangedEvent();
-        }
         
         private static readonly log4net.ILog log = 
                     log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -86,6 +81,8 @@ namespace PayWorldAdapter
         
         internal List<String> sendMessageToVPJ(string messageString,string posID)
         {
+            communication.StopReciving();
+
             byte[] messageBytes;
             List<String> messages = new List<String>();
             try

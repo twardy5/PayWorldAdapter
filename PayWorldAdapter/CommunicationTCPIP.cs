@@ -29,8 +29,13 @@ namespace PayWorldAdapter
             Port = port;
         }
 
-
         public event EventHandler<MessageEventArgs> MessageRecivedEvent;
+
+        protected virtual void OnMessageRecived(MessageEventArgs e)
+        {
+            MessageRecivedEvent?.Invoke(this, e);
+        }
+
         internal void StartReceiving(string hostname, string port)
         {
             Port = Convert.ToInt32(port);
@@ -209,14 +214,11 @@ namespace PayWorldAdapter
             }
 
         }
-        protected virtual void OnMessageRecived(MessageEventArgs e)
-        {
-            MessageRecivedEvent?.Invoke(this, e);
-        }
       
         public void StopReciving()
         {
             read = false;
+            Thread.Sleep(100);
             //T.Abort();
            
         }
