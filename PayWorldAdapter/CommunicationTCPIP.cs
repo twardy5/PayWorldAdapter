@@ -8,25 +8,26 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
+//using System.Threading.Tasks;
+
 
 namespace PayWorldAdapter
 {
     internal class CommunicationTCPIP
     {
-        private static readonly log4net.ILog log =
-                  log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly log4net.ILog log =
+                  //log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public string SendingFilePath = string.Empty;
         private const int BufferSize = 1024;
         public string Status = string.Empty;
         public Thread T = null;
+        static AutoResetEvent autoEvent = new AutoResetEvent(false);
         //TcpClient client = null;
-        internal CommunicationTCPIP(string ip, Int32 port)
+        internal CommunicationTCPIP(string ip, Int32 port,int timeout)
         {
             Hostname = ip;
             Port = port;
+            Timeout = timeout;
         }
 
         public event EventHandler<MessageEventArgs> MessageRecivedEvent;
@@ -36,49 +37,55 @@ namespace PayWorldAdapter
             MessageRecivedEvent?.Invoke(this, e);
         }
 
-        internal void StartReceiving(string hostname, string port)
-        {
-            Port = Convert.ToInt32(port);
-            Hostname = hostname;
-            read = true;
-            Thread Ts = new Thread(() => Listen(null));
-            Ts.Start();
-        }
+        public int Timeout { get; set; } = 30;
 
-
-        internal List<String> SendData(byte[] messageBytes,string posID)
+        private string MessageToRecive { get; set; }
+        internal bool SendData(byte[] messageBytes,string posID,string messageToRecive = "")
         {
             List<String> messages = new List<String>();
+            bool retVal = false;
             NetworkStream netstream = null;
             try
-            { 
-                var client = new CommunicationClient(posID,Hostname, Port);
-                client.SendTimeout = 2000;
+            {
+
+                MessageToRecive = "";
+                var client = new CommunicationClient(posID, Hostname, Port);
+                client.SendTimeout = Timeout * 1000;
                 netstream = client.GetStream();
 
                 StartReceiving(client);
                 netstream.Write(messageBytes, 0, (int)messageBytes.Length);
 
                 Thread.Sleep(50);
-                log.Info(String.Format("PosID {0}, Data Sent to {1}:{2}:{3}",posID, Hostname, Port, client.UniqueID));
+                //log.Info(String.Format("PosID {0}, Data Sent to {1}:{2}:{3}", posID, Hostname, Port, client.UniqueID));
+                if (!String.IsNullOrEmpty(messageToRecive))
+                {
+                    MessageToRecive = messageToRecive;
+                    //log.Info(String.Format("PosID {0}, Wait for  {1}", posID, messageToRecive));
+                    //wait 20 seconds
+                    retVal = autoEvent.WaitOne(Timeout * 1000);
+                    if (retVal)
+                        ;//log.Info(String.Format("PosID {0}, Message {1} recived", posID, messageToRecive));
+                    else
+                        ;// log.Info(String.Format("PosID {0}, FAILED ,timeout for message {1}", posID, messageToRecive));
+                }
+                else
+                    retVal = true;
 
             }
-
 
             catch (Exception e)
             {
-                log.Error(String.Format("PosID: {0}, {1}", posID,e));
+                //log.Error(String.Format("PosID: {0}, {1}", posID,e));
 
             }
-            return messages;
+            return retVal;
         }
         internal void StartReceiving(CommunicationClient clientSocket)
         {
             read = true;
             Thread Ts = new Thread(() => Listen(clientSocket));
             Ts.Start();
-           
-
         }
      
         private List<String> receiveMessageFromVPJ(byte[] netstream,string posID)
@@ -86,7 +93,6 @@ namespace PayWorldAdapter
             //int receiveOneMessageTimeoutMilliseconds = 30000;
             try
             {
-
                 List<String> messages = new List<String>();
                 //ByteArrayOutputStream messageBuffer = new ByteArrayOutputStream();
                 byte[] RecData = new byte[4];
@@ -121,16 +127,14 @@ namespace PayWorldAdapter
 
             catch (Exception e)
             {
-                log.Error(String.Format("PosID: {0}, {1}",posID,e));
+                //log.Error(String.Format("PosID: {0}, {1}",posID,e));
             }
             return null;
         }
 
         private bool read;
         private string Hostname;
-        internal void ListenTest(CommunicationClient clientSocket) {
-            Thread.Sleep(5000);
-        }
+        private const string errorMessage = @"<vcs-pos:errorNotification";
         internal void Listen(CommunicationClient clientSocket)
         {
             try
@@ -167,10 +171,18 @@ namespace PayWorldAdapter
                                             ms.Write(data, 0, numBytesRead);
                                         }
                                         var messages = receiveMessageFromVPJ(ms.ToArray(),clientSocket.UniqueID);
-                                        log.Info(String.Format("PosID: {0}, Data recived from {1}:{2}, message count {3}",clientSocket.UniqueID, Hostname, Port, messages.Count));
+                                        //log.Info(String.Format("PosID: {0}, Data recived from {1}:{2}, message count {3}",clientSocket.UniqueID, Hostname, Port, messages.Count));
+
                                         foreach (var msg in messages)
                                         {
-                                            log.Info(String.Format("PosID: {0},Event: Data recived  {1}", clientSocket.UniqueID, msg));
+                                            //< vcs - pos:financialTrxResponse
+                                            if (!String.IsNullOrEmpty(MessageToRecive) && ( msg.Contains(MessageToRecive) || msg.Contains(errorMessage)) ) {
+                                                autoEvent.Set();
+                                                if (msg.Contains(errorMessage) ) {
+                                                    read = false;
+                                                }
+                                            }
+                                            //log.Info(String.Format("PosID: {0},Event: Data recived  {1}", clientSocket.UniqueID, msg));
                                             OnMessageRecived(new MessageEventArgs(msg,clientSocket.UniqueID));
                                         }
                                     }
@@ -181,16 +193,16 @@ namespace PayWorldAdapter
 
                             }
 
-                            if ((DateTime.Now - startTime).Seconds > 30)
+                            if ((DateTime.Now - startTime).Seconds > Timeout)
                             {
                                 read = false;
-                                log.Info(String.Format("PosID: {0}, Listen Thread end at {1} ", clientSocket.UniqueID, DateTime.Now));
+                                //log.Info(String.Format("PosID: {0}, Listen Thread end at {1} ", clientSocket.UniqueID, DateTime.Now));
                             }
                         }
                         catch (Exception ei)
                         {
                             read = false;
-                            log.Error(String.Format("PosID: {0}, {1} ", clientSocket.UniqueID,ei.ToString()));
+                            //log.Error(String.Format("PosID: {0}, {1} ", clientSocket.UniqueID,ei.ToString()));
 
                         }
                         Thread.Sleep(100);
@@ -218,7 +230,7 @@ namespace PayWorldAdapter
         public void StopReciving()
         {
             read = false;
-            Thread.Sleep(100);
+            Thread.Sleep(200);
             //T.Abort();
            
         }

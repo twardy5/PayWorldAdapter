@@ -74,8 +74,6 @@ namespace Test
             //VPJClient client = new VPJClient(comboBox1.Text.ToString(), Convert.ToInt32(comboBox2.Text));
             //client.sendFileToVPJ(@"C:\Data\Payworld Interface\ping.xml");
         }
-        private string VCS = @"http://5.1.113.136:61613";
-        private string vibbekPOS = "http://www.vibbek.com/pos";
         private void button2_Click(object sender, EventArgs e)
         {
          
@@ -85,7 +83,7 @@ namespace Test
         private void button3_Click(object sender, EventArgs e)
         {
             VPJClient client = new VPJClient("192.168.2.96", 50000);
-            client.SendAmout("2003", 1, CurrencyType.Item978);
+            client.SendAmout("2003", 1, (int)CurrencyType.Item978,"123123");
         }
     }
 }
