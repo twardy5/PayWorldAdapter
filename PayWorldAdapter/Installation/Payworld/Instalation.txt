@@ -1,0 +1,21 @@
+Install
+1. Copy Payworld directory to C:\Temp\KKN
+2. Install dlls to GAC
+ 2.1 Open Windows PowerShell (as ADMINISTRATOR)
+ 2.2 Copy lines from "C:\Temp\KKN\Payworld\Install To GAC.txt" to powerShell window and run
+3. Register  assembly as COM objects  - This point is required only for <=2009 version
+ 3.1 run c:\Temp\KKN\Payworld\RegAsm PayWorld.cmd as ADMINISTRATOR - This point is required only for <=2009 version
+
+UnInstall
+
+1. Copy Payworld directory to C:\Temp\KKN
+2. UnRegister  assembly  (COM objects) - This point is required only for <=2009 version
+ 2.1 run c:\Temp\KKN\Payworld\UnRegAsm PayWorld.cmd as ADMINISTRATOR - This point is required only for <=2009 version
+3. UnInstall dlls from GAC
+ 3.1 Open Windows PowerShell (as ADMINISTRATOR)
+ 3.2 Copy lines from "C:\Temp\KKN\Payworld\UnInstall From GAC.txt" to powerShell window and RUN
+
+
+Also, for > 2009 Nav version  You can publish dll as any other Net component for Nav
+Copy to AddIns directory (client and server)
+

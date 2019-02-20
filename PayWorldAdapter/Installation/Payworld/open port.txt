@@ -1,0 +1,1 @@
+netsh advfirewall firewall add rule name="Carya PayWorld" dir=out action=allow protocol=TCP localport=5000 profile=domain 

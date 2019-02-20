@@ -1,0 +1,1 @@
+Get-Content "c:\Temp\KKN\Payworld\Install to GAC.ps1" | PowerShell.exe -noprofile

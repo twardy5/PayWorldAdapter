@@ -60,6 +60,10 @@
     <Compile Include="VPJClient.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Installation\Payworld\Install to GAC.ps1" />
+    <None Include="Installation\Payworld\RegAsm PayWorld.cmd" />
+    <None Include="Installation\Payworld\UnInstall from GAC.ps1" />
+    <None Include="Installation\Payworld\UnRegAsm PayWorld.cmd" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -77,7 +81,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Installation\Payworld\PayWorldAdapter_v1\" />
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Installation\Payworld\Instalation.txt" />
+    <Content Include="Installation\Payworld\Install To GAC.txt" />
+    <Content Include="Installation\Payworld\open port.txt" />
+    <Content Include="Installation\Payworld\Register dll for COM in developer Enviroment.txt" />
+    <Content Include="Installation\Payworld\UnInstall From GAC.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

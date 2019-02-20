@@ -1,0 +1,8 @@
+W œrodowisku developerskim
+1. Open Developer Command Prompt for VSxxxx
+2. cd "C:\Users\krkn\source\repos\PayWorldConnection\PayWorldAdapter\bin\Debug"
+3. gacutil -i PayWorldAdapter.dll
+4. gacutil -l PayWorldAdapter
+5. RegAsm.exe /u PayWorldAdapter.dll /tlb:PayWorldAdapter.tlb  - odinstalowanie
+6. RegAsm.exe /codebase PayWorldAdapter.dll /tlb:PayWorldAdapter.tlb
+
